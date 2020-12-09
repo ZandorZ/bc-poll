@@ -1,0 +1,56 @@
+<form [formGroup]="pollForm" novalidate (ngSubmit)="onSubmit()">
+  <mat-card class="shipping-card">
+    <mat-card-header>
+      <mat-card-title>Create Poll</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <div class="row">
+        <div class="col">
+          <mat-form-field class="full-width">
+            <input matInput placeholder="Poll question" formControlName="question" autocomplete="off">
+            <mat-error *ngIf="pollForm.controls['question'].hasError('required')">
+                Question is required!
+            </mat-error>
+            <mat-error *ngIf="pollForm.controls['question'].hasError('minlength')">
+                At least 20 characters
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col">
+          <mat-form-field class="full-width">
+            <input matInput placeholder="Image" formControlName="image" autocomplete="off">
+            <mat-error *ngIf="pollForm.controls['image'].hasError('pattern')">
+                Invalid URL
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col">
+          <mat-form-field class="full-width">
+            <input matInput placeholder="Option 1" formControlName="op1" autocomplete="off">
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col">
+          <mat-form-field class="full-width">
+            <input matInput placeholder="Option 2" formControlName="op2" autocomplete="off">
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col">
+          <mat-form-field class="full-width">
+            <input matInput placeholder="Option 3" formControlName="op3" autocomplete="off">
+          </mat-form-field>
+        </div>
+      </div>
+    </mat-card-content>
+    <mat-card-actions>
+      <button mat-raised-button color="primary" [disabled]="pollForm.pristine || pollForm.invalid" type="submit">Submit</button>
+    </mat-card-actions>
+  </mat-card>
+</form>
