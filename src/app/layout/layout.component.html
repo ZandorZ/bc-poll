@@ -29,6 +29,7 @@
         </mat-toolbar>
         <!-- content -->
 
-        <app-poll-view *ngFor="let poll of polls" [voted]="true" [poll]="poll"></app-poll-view>
+        <!-- <app-poll-view *ngFor="let poll of polls" [voted]="true" [poll]="poll"></app-poll-view> -->
+        <app-poll-vote [poll]="polls[0]"></app-poll-vote>
     </mat-sidenav-content>
 </mat-sidenav-container>
