@@ -27,6 +27,8 @@
             </button>
             <span>Blockchain Polls</span>
         </mat-toolbar>
-        <app-poll-create></app-poll-create>
+        <!-- content -->
+
+        <app-poll-view *ngFor="let poll of polls" [voted]="true" [poll]="poll"></app-poll-view>
     </mat-sidenav-content>
 </mat-sidenav-container>
