@@ -13,12 +13,15 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatListModule } from '@angular/material/list';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
+import {MatSnackBarModule} from '@angular/material/snack-bar';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatCardModule } from '@angular/material/card';
 import { ReactiveFormsModule } from '@angular/forms';
 import { PollViewComponent } from './poll-view/poll-view.component';
 import { PollVoteComponent } from './poll-vote/poll-vote.component';
 import { PollInfoComponent } from './poll-info/poll-info.component';
+import { AppRoutingModule } from './app.routing';
+import { PollGridComponent } from './poll-grid/poll-grid.component';
 
 @NgModule({
   declarations: [
@@ -27,7 +30,8 @@ import { PollInfoComponent } from './poll-info/poll-info.component';
     LayoutComponent,
     PollViewComponent,
     PollVoteComponent,
-    PollInfoComponent
+    PollInfoComponent,
+    PollGridComponent
   ],
   imports: [
     BrowserModule,
@@ -35,6 +39,7 @@ import { PollInfoComponent } from './poll-info/poll-info.component';
     LayoutModule,
     MatToolbarModule,
     MatButtonModule,
+    MatSnackBarModule,
     MatSidenavModule,
     MatIconModule,
     MatListModule,
@@ -42,7 +47,8 @@ import { PollInfoComponent } from './poll-info/poll-info.component';
     MatSelectModule,
     MatRadioModule,
     MatCardModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    AppRoutingModule
   ],
   providers: [],
   bootstrap: [AppComponent]

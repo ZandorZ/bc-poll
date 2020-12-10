@@ -26,11 +26,27 @@
                 <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
             </button>
             <span>Blockchain Polls</span>
+            <span style="flex: 1"></span>
+            <span>
+                <button
+                    mat-button
+                    routerLink="/create"
+                    [routerLinkActive]="['mat-accent']"
+                    [routerLinkActiveOptions]="{ exact: true }"
+                >
+                    <mat-icon>poll</mat-icon> Create New
+                </button>
+                <button
+                    mat-button
+                    routerLink="/polls"
+                    [routerLinkActive]="['mat-accent']"
+                    [routerLinkActiveOptions]="{ exact: true }"
+                >
+                    <mat-icon>poll</mat-icon> All Polls
+                </button>
+            </span>
         </mat-toolbar>
         <!-- content -->
-
-        <!-- <app-poll-view *ngFor="let poll of polls" [voted]="true" [poll]="poll"></app-poll-view> -->
-        <!-- <app-poll-vote [poll]="polls[0]"></app-poll-vote> -->
-        <app-poll-info [poll]="polls[2]" ></app-poll-info>
+        <router-outlet></router-outlet>
     </mat-sidenav-content>
 </mat-sidenav-container>
