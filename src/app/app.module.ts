@@ -17,13 +17,17 @@ import { MatRadioModule } from '@angular/material/radio';
 import { MatCardModule } from '@angular/material/card';
 import { ReactiveFormsModule } from '@angular/forms';
 import { PollViewComponent } from './poll-view/poll-view.component';
+import { PollVoteComponent } from './poll-vote/poll-vote.component';
+import { PollInfoComponent } from './poll-info/poll-info.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     PollCreateComponent,
     LayoutComponent,
-    PollViewComponent
+    PollViewComponent,
+    PollVoteComponent,
+    PollInfoComponent
   ],
   imports: [
     BrowserModule,

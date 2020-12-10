@@ -1,20 +1,31 @@
 <form [formGroup]="pollForm" novalidate (ngSubmit)="onSubmit()">
-  <mat-card>
-    <mat-card-header>
-      <mat-card-title>Poll Vote #{{poll.id}}</mat-card-title>
-      <mat-card-subtitle>{{poll.question}}</mat-card-subtitle>
-    </mat-card-header>
-    <mat-card-content>
-      <div class="row">
-        <div class="col">
-          <mat-radio-group formControlName="vote">
-            <mat-radio-button *ngFor="let option of poll.options; let i = index" [value]="i">{{option}}</mat-radio-button>
-          </mat-radio-group>
-        </div>
-      </div>
-    </mat-card-content>
-    <mat-card-actions>
-      <button mat-raised-button color="primary" type="submit" [disabled]="pollForm.invalid">Submit</button>
-    </mat-card-actions>
-  </mat-card>
+    <mat-card>
+        <mat-card-header>
+            <mat-card-title>Poll Vote #{{ poll.id }}</mat-card-title>
+            <mat-card-subtitle>{{ poll.question }}</mat-card-subtitle>
+        </mat-card-header>
+        <mat-card-content>
+            <div class="row">
+                <div class="col">
+                    <mat-radio-group formControlName="vote">
+                        <mat-radio-button
+                            *ngFor="let option of poll.options; let i = index"
+                            [value]="i"
+                            >{{ option }}</mat-radio-button
+                        >
+                    </mat-radio-group>
+                </div>
+            </div>
+        </mat-card-content>
+        <mat-card-actions>
+            <button
+                mat-raised-button
+                color="primary"
+                type="submit"
+                [disabled]="pollForm.invalid"
+            >
+                Submit
+            </button>
+        </mat-card-actions>
+    </mat-card>
 </form>
