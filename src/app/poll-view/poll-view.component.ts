@@ -16,7 +16,12 @@ export class PollViewComponent implements OnInit {
   constructor() { }
 
   ngOnInit(): void {
-      this.totalVotes = this.poll.results.reduce( (item, curr) => item + curr);
+      if (this.poll.results.length > 0) {
+        this.totalVotes = this.poll.results.reduce( (item, curr) => item + curr);
+      } else {
+        this.totalVotes = 0;
+      }
+
   }
 
 }

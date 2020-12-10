@@ -1,0 +1,3 @@
+<!-- <div *ngIf="(polls$ | async).length"> -->
+    <app-poll-view  *ngFor="let poll of polls$ | async" [voted]="true" [poll]="poll"></app-poll-view>
+<!-- </div> -->
