@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { delay } from 'rxjs/operators';
-import { Poll } from '../types';
+import { Poll, PollForm, PollVote } from '../types';
 
 @Injectable({
     providedIn: 'root'
@@ -36,22 +36,24 @@ export class PollService {
 
     constructor() { }
 
+    getPoll(id : number): Poll {
+        return this.polls.find( poll => poll.id == id);
+    }
+
      getPolls(): Observable<Poll[]> {
         return of(this.polls);
     }
 
-    vote(pollId: number, voteNumber: number) {
+    vote(pollVote: PollVote) {
 
     }
 
-     createPoll(question: string, thumbnail: string, options: string[]): Promise<boolean> {
+     createPoll(pollForm: PollForm): Promise<boolean> {
         this.currentID ++;
         this.polls.push({
             id: this.currentID,
-            options: options,
-            thumbnail: thumbnail,
-            question: question,
-            results: []
+            results: [],
+            ...pollForm
         });
 
         return Promise.resolve(true);

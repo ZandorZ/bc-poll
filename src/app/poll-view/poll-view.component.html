@@ -1,16 +1,17 @@
 <mat-card class="example-card">
     <mat-card-header>
-      <mat-card-title>Poll #{{poll.id}}</mat-card-title>
-      <mat-card-subtitle>{{poll.question}}</mat-card-subtitle>
+        <mat-card-title>Poll #{{ poll.id }}</mat-card-title>
+        <mat-card-subtitle>{{ poll.question }}</mat-card-subtitle>
     </mat-card-header>
     <img mat-card-image [src]="poll.thumbnail" />
     <mat-card-content>
-      <p class="mat-caption">
-       {{totalVotes}} votes
-      </p>
+        <p class="mat-caption">{{ totalVotes }} votes</p>
     </mat-card-content>
     <mat-card-actions>
-      <button *ngIf="voted" [disabled]="true" mat-raised-button>VOTED</button>
-      <button *ngIf="!voted"  mat-raised-button>VOTE</button>
+        <button *ngIf="voted" [disabled]="true" mat-button>VOTED</button>
+        <button *ngIf="!voted" [routerLink]="['/vote', poll.id]" mat-button>
+            VOTE
+        </button>
+        <button mat-button [routerLink]="['/info', poll.id]">RESULTS</button>
     </mat-card-actions>
-  </mat-card>
+</mat-card>

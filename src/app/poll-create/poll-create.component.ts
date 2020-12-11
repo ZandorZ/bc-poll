@@ -20,13 +20,16 @@ export class PollCreateComponent {
     hasUnitNumber = false;
 
     constructor(private fb: FormBuilder, private _snackBar: MatSnackBar, private pollService: PollService) {
-
     }
 
     async onSubmit() {
         try {
-            const poll = this.pollForm.getRawValue() as any;
-            await this.pollService.createPoll(poll.question, poll.thumbnail, [poll.op1, poll.op2, poll.op3]);
+            const values = this.pollForm.getRawValue() as any;
+            await this.pollService.createPoll({
+                question: values.question,
+                thumbnail: values.thumbnail,
+                options: [values.op1, values.op2, values.op3]
+            });
             this._snackBar.open("Poll was created sucessfully", "OK", {
                 duration: 2000,
             });

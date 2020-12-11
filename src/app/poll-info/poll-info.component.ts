@@ -1,5 +1,7 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import ApexCharts from 'apexcharts';
+import { PollService } from '../services/poll.service';
 import { Poll } from '../types';
 
 @Component({
@@ -9,15 +11,24 @@ import { Poll } from '../types';
 })
 export class PollInfoComponent implements OnInit {
 
-    @Input() poll: Poll;
+    poll:Poll;
 
-    constructor() { }
-
-    ngOnInit(): void {
-        this.generateChart();
+    constructor(private route: ActivatedRoute, private pollService: PollService) {
     }
 
-    generateChart() {
+    ngOnInit(): void {
+        const id = Number(this.route.snapshot.paramMap.get('id'));
+        this.poll = this.pollService.getPoll(id);
+
+        if(!!this.poll){
+            this.generateChart();
+        } else {
+            alert("Poll not found");
+        }
+    }
+
+
+    private generateChart() {
         const options:ApexCharts.ApexOptions = {
             series:[
                 {
@@ -44,7 +55,6 @@ export class PollInfoComponent implements OnInit {
 
         const chart = new ApexCharts(document.getElementById("poll-chart"), options);
         chart.render();
-
     }
 
 }

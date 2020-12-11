@@ -1,5 +1,7 @@
-import { Component, Input } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
+import { ActivatedRoute } from '@angular/router';
+import { PollService } from '../services/poll.service';
 import { Poll } from '../types';
 
 @Component({
@@ -7,17 +9,31 @@ import { Poll } from '../types';
     templateUrl: './poll-vote.component.html',
     styleUrls: ['./poll-vote.component.scss']
 })
-export class PollVoteComponent {
+export class PollVoteComponent implements OnInit {
 
-    @Input() poll: Poll;
+    poll: Poll;
 
-    pollForm = this.fb.group({
+    voteForm = this.fb.group({
         vote: [null, Validators.required]
     });
 
-    constructor(private fb: FormBuilder) { }
+    constructor(private route: ActivatedRoute, private fb: FormBuilder, private pollService: PollService) { }
+
+
+    ngOnInit():void{
+        const id = Number(this.route.snapshot.paramMap.get('id'));
+        this.poll = this.pollService.getPoll(id);
+
+        //not found
+        if(!this.poll){
+            alert("Poll not found");
+        }
+    }
 
     onSubmit() {
-        console.log(this.pollForm.value)
+        this.pollService.vote({
+            id: this.poll.id,
+            vote: this.voteForm.get('vote').value
+        });
     }
 }
