@@ -20,9 +20,9 @@ export class PollVoteComponent implements OnInit {
     constructor(private route: ActivatedRoute, private fb: FormBuilder, private pollService: PollService) { }
 
 
-    ngOnInit():void{
+    async ngOnInit(){
         const id = Number(this.route.snapshot.paramMap.get('id'));
-        this.poll = this.pollService.getPoll(id);
+        this.poll = await this.pollService.getPoll(id);
 
         //not found
         if(!this.poll){

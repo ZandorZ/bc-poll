@@ -7,6 +7,7 @@ export interface PollForm {
 export interface Poll extends PollForm{
     id: number // 12
     results: number[] // [0,0,0,5,3,1]
+    voted: boolean
 }
 
 export interface PollVote {

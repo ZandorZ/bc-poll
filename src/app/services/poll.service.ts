@@ -1,61 +1,67 @@
 import { Injectable } from '@angular/core';
-import { Observable, of } from 'rxjs';
-import { delay } from 'rxjs/operators';
 import { Poll, PollForm, PollVote } from '../types';
+import { Web3Service } from './web3.service';
+import { fromAscii, toAscii } from 'web3-utils';
 
 @Injectable({
     providedIn: 'root'
 })
 export class PollService {
 
-    currentID = 3;
+    constructor(private web3Serv: Web3Service) { }
 
-    polls: Poll[] = [
-        {
-            id: 1,
-            options: ["Cats", "Dogs", "Both"],
-            results: [4, 5, 6],
-            question: "Do you like more cats or dogs?",
-            thumbnail: "https://images.pexels.com/photos/1909802/pexels-photo-1909802.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=560"
-        },
-        {
-            id: 2,
-            options: ["June", "July","August", "September"],
-            results: [2, 1, 10, 9],
-            question: "Best month for summer holidays?",
-            thumbnail: "https://images.pexels.com/photos/413960/pexels-photo-413960.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940"
-        },
-        {
-            id: 3,
-            options: ["Red", "Green", "Blue"],
-            results: [1, 4, 3],
-            question: "Best color for your house?",
-            thumbnail: "https://images.pexels.com/photos/106399/pexels-photo-106399.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260"
-        },
-    ];
-
-    constructor() { }
-
-    getPoll(id : number): Poll {
-        return this.polls.find( poll => poll.id == id);
+    private normalizeVoter(voter: any) {
+        return {
+            id: voter[0],
+            votedIds: voter[1].map(vote => parseInt(vote)),
+        }
     }
 
-     getPolls(): Observable<Poll[]> {
-        return of(this.polls);
+    private normalizePoll(pollRaw: any, voter: any): Poll {
+        return {
+            id: pollRaw[0],
+            question: pollRaw[1],
+            thumbnail: pollRaw[2],
+            results: pollRaw[3].map(vote => parseInt(vote)),
+            options: pollRaw[4].map(opt => toAscii(opt).replace(/\u0000/g, '')),
+            voted: voter.votedIds.length &&
+                            voter.votedIds.find(votedId => votedId === parseInt(pollRaw[0])) != undefined,
+        }
     }
 
-    vote(pollVote: PollVote) {
-
+    async getPoll(id: number): Promise<Poll> {
+        const acc = await this.web3Serv.getAccount();
+        const voter = await this.web3Serv.call('getVoter', acc);
+        const voterNormalized = this.normalizeVoter(voter);
+        const pollRaw = await this.web3Serv.call('getPoll', id);
+        return this.normalizePoll(pollRaw, voterNormalized);
     }
 
-     createPoll(pollForm: PollForm): Promise<boolean> {
-        this.currentID ++;
-        this.polls.push({
-            id: this.currentID,
-            results: [],
-            ...pollForm
-        });
+    async getPolls(): Promise<Poll[]> {
+        const polls: Poll[] = [];
+        const acc = await this.web3Serv.getAccount();
+        const voter = await this.web3Serv.call('getVoter', acc);
+        const voterNormalized = this.normalizeVoter(voter);
+        const totalPolls = await this.web3Serv.call('getTotalVotes');
 
-        return Promise.resolve(true);
+        for (let i = 0; i < totalPolls; i++) {
+            const pollRaw = await this.web3Serv.call('getPoll', i);
+            const pollNormalized = this.normalizePoll(pollRaw, voterNormalized);
+            polls.push(pollNormalized);
+        }
+
+        return polls;
+    }
+
+    vote(pollVote: PollVote): Promise<void> {
+        return this.web3Serv.executeTransaction("vote", pollVote.id, pollVote.vote);
+    }
+
+    createPoll(pollForm: PollForm): Promise<void> {
+        return this.web3Serv.executeTransaction(
+            "createPoll",
+            pollForm.question,
+            pollForm.thumbnail || '',
+            pollForm.options.map(opt => fromAscii(opt)));
     }
 }
