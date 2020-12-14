@@ -2,13 +2,28 @@ import { Injectable } from '@angular/core';
 import { Poll, PollForm, PollVote } from '../types';
 import { Web3Service } from './web3.service';
 import { fromAscii, toAscii } from 'web3-utils';
+import {  from, merge, Observable } from 'rxjs';
+import { mergeMap } from 'rxjs/operators';
 
 @Injectable({
     providedIn: 'root'
 })
 export class PollService {
 
-    constructor(private web3Serv: Web3Service) { }
+    polls$: Observable<Poll[]>;
+
+    constructor(private web3Serv: Web3Service) {
+
+        const _pollsConcat$ = this.onPollCreated().pipe(
+            mergeMap(_ => from(this._getPolls()))
+        );
+
+        this.polls$ = merge(
+            this._getPolls(),
+            _pollsConcat$
+        );
+
+    }
 
     private normalizeVoter(voter: any) {
         return {
@@ -25,7 +40,7 @@ export class PollService {
             results: pollRaw[3].map(vote => parseInt(vote)),
             options: pollRaw[4].map(opt => toAscii(opt).replace(/\u0000/g, '')),
             voted: voter.votedIds.length &&
-                            voter.votedIds.find(votedId => votedId === parseInt(pollRaw[0])) != undefined,
+                voter.votedIds.find(votedId => votedId === parseInt(pollRaw[0])) != undefined,
         }
     }
 
@@ -37,7 +52,11 @@ export class PollService {
         return this.normalizePoll(pollRaw, voterNormalized);
     }
 
-    async getPolls(): Promise<Poll[]> {
+    getPolls(): Observable<Poll[]> {
+        return this.polls$;
+    }
+
+    private async _getPolls(): Promise<Poll[]> {
         const polls: Poll[] = [];
         const acc = await this.web3Serv.getAccount();
         const voter = await this.web3Serv.call('getVoter', acc);
@@ -63,5 +82,9 @@ export class PollService {
             pollForm.question,
             pollForm.thumbnail || '',
             pollForm.options.map(opt => fromAscii(opt)));
+    }
+
+    onPollCreated(): Observable<any> {
+        return this.web3Serv.onEvents('PollCreated');
     }
 }
