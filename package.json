@@ -24,6 +24,7 @@
     "apexcharts": "^3.22.3",
     "rxjs": "~6.6.0",
     "tslib": "^2.0.0",
+    "web3": "^1.3.0",
     "zone.js": "~0.10.2"
   },
   "devDependencies": {
