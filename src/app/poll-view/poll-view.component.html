@@ -8,10 +8,10 @@
         <p class="mat-caption">{{ totalVotes }} votes</p>
     </mat-card-content>
     <mat-card-actions>
-        <button *ngIf="voted" [disabled]="true" mat-button>VOTED</button>
-        <button *ngIf="!voted" [routerLink]="['/vote', poll.id]" mat-button>
+        <button color="primary" *ngIf="voted" [disabled]="true" mat-button>VOTED</button>
+        <button color="primary" *ngIf="!voted" [routerLink]="['/vote', poll.id]" mat-button>
             VOTE
         </button>
-        <button mat-button [routerLink]="['/info', poll.id]">RESULTS</button>
+        <button color="accent" mat-button [disabled]="totalVotes == 0"  [routerLink]="['/info', poll.id]">RESULTS</button>
     </mat-card-actions>
 </mat-card>

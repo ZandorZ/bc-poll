@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { from, Observable } from 'rxjs';
+import { Observable } from 'rxjs';
 import { PollService } from '../services/poll.service';
 import { Poll } from '../types';
 
@@ -10,9 +10,10 @@ import { Poll } from '../types';
 })
 export class PollGridComponent implements OnInit {
 
-    polls$: Observable<Poll[]> = from(this.pollService.getPolls());
+    polls$: Observable<Poll[]> = this.pollService.getPolls();
 
-    constructor(private pollService: PollService) { }
+    constructor(private pollService: PollService) {
+    }
 
     ngOnInit(): void {
     }

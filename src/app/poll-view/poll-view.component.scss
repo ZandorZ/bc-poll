@@ -1,9 +1,11 @@
 mat-card{
-    margin: 20px;
+    margin-left: 20px;
+    margin-top: 20px;
     display: inline-block;
 }
 
-.example-card {
+.example-card > img {
     max-width: 320px;
-    max-width: 320px;
+    height: 200px;
+    object-fit: cover;
   }
